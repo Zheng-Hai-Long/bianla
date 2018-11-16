@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bianla.admin.dao.NewsMapper">
+
+	<update id="update" parameterType="com.bianla.admin.entity.News">
+		update news
+			<set>
+				<if test="title != null and title != ''">
+					title = #{title},
+				</if>
+				<if test="source != null and source != ''">
+					source = #{source},
+				</if>
+				<if test="abstracts != null and abstracts != ''">
+					abstracts = #{abstracts},
+				</if>
+				<if test="state != null">
+					state = #{state},
+				</if>
+				<if test="content != null and content != ''">
+					content = #{content},
+				</if>
+				<if test="categoryName != null and categoryName != ''">
+					category_name = #{categoryName},
+				</if>
+				<if test="coverimageId != null">
+					coverimage_id = #{coverimageId},
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime}
+				</if>
+			</set>
+		where id = #{id}
+	</update>
+
+	<select id="queryByParam" resultType="com.bianla.admin.dto.NewsDTO" parameterType="com.bianla.admin.entity.News">
+		select n.*,b.middle_url coverimageUrl from news n left join b_file b on n.coverimage_id = b.id
+		<where>
+			<if test="state != null">
+				and n.state = #{state}
+			</if>
+			<if test="categoryName != null and categoryName != ''">
+				and category_name = #{categoryName}
+			</if>
+			<if test="title != null and title != ''">
+				and title like "%"#{title}"%"
+			</if>
+			<if test="source != null and source != ''">
+				and source like "%"#{source}"%"
+			</if>
+		</where>
+	</select>
+
+	<select id="queryById" resultType="com.bianla.admin.dto.NewsDTO" parameterType="integer">
+		select n.*,b.middle_url coverimageUrl from news n left join b_file b on n.coverimage_id = b.id where n.id = #{id}
+	</select>
+</mapper>

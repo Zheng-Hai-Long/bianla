@@ -10,25 +10,15 @@ import com.bianla.admin.dto.Result;
 public class ResultUtil<T> {
 
     public static Result EMPTY_DATA(){
-        Result result = new Result();
-        result.setCode(ResultEnum.EMPTY_DATA.getCode());
-        result.setMsg(ResultEnum.EMPTY_DATA.getMsg());
-        return result;
+        return new Result(ResultEnum.EMPTY_DATA);
     }
 
     public Result SUCCESS( T t){
-        Result result = new Result();
-        result.setCode(ResultEnum.SUCCESS.getCode());
-        result.setMsg(ResultEnum.SUCCESS.getMsg());
-        result.setData(t);
-        return result;
+        return new Result(ResultEnum.SUCCESS, t);
     }
 
     public static Result SUCCESS(){
-        Result result = new Result();
-        result.setCode(ResultEnum.SUCCESS.getCode());
-        result.setMsg(ResultEnum.SUCCESS.getMsg());
-        return result;
+        return new Result(ResultEnum.SUCCESS);
     }
 
     public static Result ERROR(int code, String msg){
@@ -39,16 +29,10 @@ public class ResultUtil<T> {
     }
 
     public static Result ERROR(){
-        Result result = new Result();
-        result.setCode(ResultEnum.ERROR.getCode());
-        result.setMsg(ResultEnum.ERROR.getMsg());
-        return result;
+        return new Result(ResultEnum.ERROR);
     }
 
     public static Result NOTLOGIN(){
-        Result result = new Result();
-        result.setCode(ResultEnum.NOT_LOGIN.getCode());
-        result.setMsg(ResultEnum.NOT_LOGIN.getMsg());
-        return result;
+        return new Result(ResultEnum.NOT_LOGIN);
     }
 }

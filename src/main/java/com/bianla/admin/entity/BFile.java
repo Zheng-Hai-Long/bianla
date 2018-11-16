@@ -1,11 +1,16 @@
 package com.bianla.admin.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Created by admin on 2018/10/28.
  */
+@Entity
+@Table(name = "b_file")
 public class BFile implements Serializable {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
     private String type;

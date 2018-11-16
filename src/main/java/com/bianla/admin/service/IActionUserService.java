@@ -11,4 +11,6 @@ public interface IActionUserService {
     Result queryByParam(ActionUser param);
 
     Result login(String userName, String password);
+
+    ActionUser queryById(Integer userId);
 }

@@ -1,15 +1,23 @@
 package com.bianla.admin.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
  * Created by admin on 2018/10/28.
  */
-
+@Entity
 public class Category implements Serializable{
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "分类名称不能为空")
     private String categoryName;
 
     private String title;

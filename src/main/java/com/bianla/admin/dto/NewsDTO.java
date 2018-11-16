@@ -1,37 +1,28 @@
-package com.bianla.admin.entity;
+package com.bianla.admin.dto;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by admin on 2018/10/28.
+ * Created by ZHL on 2018/11/16.
  */
-@Entity
-public class News implements Serializable{
+public class NewsDTO implements Serializable{
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "标题不能为空")
     private String title;
 
-    @NotBlank(message = "来源不能为空")
     private String source;
 
-    @NotBlank(message = "摘要不能为空")
     private String abstracts;
 
-    @NotBlank(message = "内容不能为空")
     private String content;
 
-    @NotNull(message = "分类不能为空")
     private String categoryName;
 
     private Integer coverimageId;
+
+    private String coverimageUrl;
 
     /**
      * 新闻状态
@@ -44,14 +35,6 @@ public class News implements Serializable{
     private Date updateTime;
 
     private Date createTime;
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
 
     public Integer getId() {
         return id;
@@ -109,6 +92,22 @@ public class News implements Serializable{
         this.coverimageId = coverimageId;
     }
 
+    public String getCoverimageUrl() {
+        return coverimageUrl;
+    }
+
+    public void setCoverimageUrl(String coverimageUrl) {
+        this.coverimageUrl = coverimageUrl;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -123,21 +122,5 @@ public class News implements Serializable{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    @Override
-    public String toString() {
-        return "News{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", source='" + source + '\'' +
-                ", abstracts='" + abstracts + '\'' +
-                ", content='" + content + '\'' +
-                ", categoryName='" + categoryName + '\'' +
-                ", coverimageId=" + coverimageId +
-                ", state=" + state +
-                ", updateTime=" + updateTime +
-                ", createTime=" + createTime +
-                '}';
     }
 }

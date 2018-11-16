@@ -1,5 +1,7 @@
 package com.bianla.admin.dto;
 
+import com.bianla.admin.Enum.ResultEnum;
+
 /**
  * Created by admin on 2018/9/16.
  */
@@ -10,6 +12,32 @@ public class Result<T> {
     private String msg;
 
     private T data;
+
+    public Result(){
+
+    }
+
+    public Result(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
+    public Result(Integer code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public Result(ResultEnum resultEnum){
+        this.code = resultEnum.getCode();
+        this.msg = resultEnum.getMsg();
+    }
+
+    public Result(ResultEnum resultEnum, T data){
+        this.code = resultEnum.getCode();
+        this.msg = resultEnum.getMsg();
+        this.data = data;
+    }
 
     public Integer getCode() {
         return code;

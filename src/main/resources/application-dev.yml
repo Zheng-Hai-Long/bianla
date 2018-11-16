@@ -1,2 +1,31 @@
 server:
-  port: 8080
+  port: 8088
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/bianla?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 1234
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  redis:
+      database: 0
+      host: 192.168.14.67
+      port: 1120
+      password: I7xS.<>rg
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+      timeout: 10000
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+  type-aliases-package: com.bianla.admin.entity  # 注意：对应实体类的路径
+  configuration:
+    mapUnderscoreToCamelCase: true
+    map-underscore-to-camel-case: true

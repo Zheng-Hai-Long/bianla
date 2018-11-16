@@ -4,226 +4,134 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 public class CookieUtil {
 
-    private static final String DO_MIAN_NAME = "localhost";
-
     public static final int COOKIE_MAX_AGE = 7 * 24 * 3600;
 
-    public static final int COOKIE_HALF_HOUR = 30 * 60;
+    public static final Long COOKIE_HALF_HOUR = 30 * 60l;
 
+
+    private static final String COOKIE_KEY="bianla20181105";
+    private static String DOMAIN_NAME= "localhost";//localhost;.17xs.org;
+
+    //保存的cookie名称,登入有关cookie
     public static final String LOGIN_ACTION_USER_ID = "login_action_user_id";
 
+
+    //保存的cookie有效时间
+    public static final int EXPIRED_30MINUTE = 60*30;
+
+    public static final int EXPIRED_DEFAULT_MINUTE = -1;
+
+    public static int DAY = 24 * 60 * 60; //一天的秒数
     /**
-     * 得到Cookie的值, 不编码
-     *
-     * @param request
-     * @param cookieName
-     * @return
+     * 记住帐号密码的过期时间，缺省的时候是 30 天.
      */
-    public static String getCookieValue(HttpServletRequest request, String cookieName) {
-        return getCookieValue(request, cookieName, false);
+    public static int EXPIRED_REMEBER = 30 * DAY;
+
+    public static int YEAR = 365 *DAY; //一年
+
+    /**
+     * 取得 cookie 的值.
+     *
+     * @param cookieName cookie 名称
+     * @param request    HttpServletRequest 对象
+     * @return 如果找得到相应 cookie 的值，则返回该值，否则返回 null.
+     */
+    public static String retrieve(String cookieName, HttpServletRequest request, boolean IsEncrypt) {
+        if (cookieName == null) {
+            return null;
+        }
+        if(IsEncrypt){
+            try{
+                //对cookie解密
+                cookieName = EncryptionUtil.encrypt(cookieName, COOKIE_KEY, EncryptionUtil.TYPE_DES).replaceAll("=", "");
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies == null) {
+            return null;
+        }
+
+        String cookieValue = null;
+        for (int i = 0; i < cookies.length; i++) {
+            Cookie cookie = cookies[i];
+            if (cookieName.equals(cookie.getName())) {
+                cookieValue = cookie.getValue();
+                break;
+            }
+        }
+        if (cookieValue == null) {
+            return null;
+        }
+        if(IsEncrypt){
+            try{
+                //对cookie解密
+                cookieValue = EncryptionUtil.decrypt(cookieValue, COOKIE_KEY, EncryptionUtil.TYPE_DES);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return cookieValue;
     }
 
     /**
-     * 得到Cookie的值,
+     * 创建新的 cookie .
+     * <p>新的 cookie 的域默认为 binguo.com ，生命周期为 -1，即当前浏览器有效.</p>
      *
-     * @param request
-     * @param cookieName
-     * @return
+     * @param cookieName cookie 的名称
+     * @param value      值
+     * @param expired    过期时间，以秒为单位，预设值：CookieManager.EXPIRED_SESSION 和 CookieManager.EXPIRED_NEVER
+     * @param response   HttpServletResponse 对象
      */
-    public static String getCookieValue(HttpServletRequest request, String cookieName, boolean isDecoder) {
-        Cookie[] cookieList = request.getCookies();
-        if (cookieList == null || cookieName == null) {
-            return null;
-        }
-        String retValue = null;
+    public static void create(String cookieName, String value, int expired, HttpServletResponse response, boolean IsEncrypt) {
         try {
-            for (int i = 0; i < cookieList.length; i++) {
-                if (cookieList[i].getName().equals(cookieName)) {
-                    if (isDecoder) {
-                        retValue = URLDecoder.decode(cookieList[i].getValue(), "UTF-8");
-                    } else {
-                        retValue = cookieList[i].getValue();
-                    }
-                    break;
-                }
-            }
+            value = URLEncoder.encode(value, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return retValue;
+        if(IsEncrypt){
+            try{
+                //对cookie加密
+                value = EncryptionUtil.encrypt(value, COOKIE_KEY, EncryptionUtil.TYPE_DES);
+                cookieName = EncryptionUtil.encrypt(cookieName, COOKIE_KEY, EncryptionUtil.TYPE_DES).replaceAll("=", "");
+            }catch(Exception e){
+                //e.printStackTrace();
+            }
+        }
+
+        Cookie cookie = new Cookie(cookieName, value);
+        cookie.setMaxAge(expired);
+        cookie.setPath("/");
+        cookie.setDomain(DOMAIN_NAME);
+        response.addCookie(cookie);
     }
 
     /**
-     * 得到Cookie的值,
+     * 删除cookieName的cookie
      *
-     * @param request
-     * @param cookieName
-     * @return
+     * @param cookieName 要删除的cookie名字
+     * @param response   HttpServletResponse 对象
      */
-    public static String getCookieValue(HttpServletRequest request, String cookieName, String encodeString) {
-        Cookie[] cookieList = request.getCookies();
-        if (cookieList == null || cookieName == null) {
-            return null;
-        }
-        String retValue = null;
-        try {
-            for (int i = 0; i < cookieList.length; i++) {
-                if (cookieList[i].getName().equals(cookieName)) {
-                    retValue = URLDecoder.decode(cookieList[i].getValue(), encodeString);
-                    break;
-                }
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return retValue;
-    }
-
-    /**
-     * 设置Cookie的值 不设置生效时间默认浏览器关闭即失效,也不编码
-     */
-    public static void setCookie(HttpServletRequest request, HttpServletResponse response, String cookieName,
-                                 String cookieValue) {
-        setCookie(request, response, cookieName, cookieValue, -1);
-    }
-
-    /**
-     * 设置Cookie的值 在指定时间内生效,但不编码
-     */
-    public static void setCookie(HttpServletRequest request, HttpServletResponse response, String cookieName,
-                                 String cookieValue, int cookieMaxage) {
-        setCookie(request, response, cookieName, cookieValue, cookieMaxage, false);
-    }
-
-    /**
-     * 设置Cookie的值 不设置生效时间,但编码
-     */
-    public static void setCookie(HttpServletRequest request, HttpServletResponse response, String cookieName,
-                                 String cookieValue, boolean isEncode) {
-        setCookie(request, response, cookieName, cookieValue, -1, isEncode);
-    }
-
-    /**
-     * 设置Cookie的值 在指定时间内生效, 编码参数
-     */
-    public static void setCookie(HttpServletRequest request, HttpServletResponse response, String cookieName,
-                                 String cookieValue, int cookieMaxage, boolean isEncode) {
-        doSetCookie(request, response, cookieName, cookieValue, cookieMaxage, isEncode);
-    }
-
-    /**
-     * 设置Cookie的值 在指定时间内生效, 编码参数(指定编码)
-     */
-    public static void setCookie(HttpServletRequest request, HttpServletResponse response, String cookieName,
-                                 String cookieValue, int cookieMaxage, String encodeString) {
-        doSetCookie(request, response, cookieName, cookieValue, cookieMaxage, encodeString);
-    }
-
-    /**
-     * 删除Cookie带cookie域名
-     */
-    public static void deleteCookie(HttpServletRequest request, HttpServletResponse response,
-                                    String cookieName) {
-        doSetCookie(request, response, cookieName, "", -1, false);
-    }
-
-    /**
-     * 设置Cookie的值，并使其在指定时间内生效
-     *
-     * @param cookieMaxage cookie生效的最大秒数
-     */
-    private static final void doSetCookie(HttpServletRequest request, HttpServletResponse response,
-                                          String cookieName, String cookieValue, int cookieMaxage, boolean isEncode) {
-        try {
-            if (cookieValue == null) {
-                cookieValue = "";
-            } else if (isEncode) {
-                cookieValue = URLEncoder.encode(cookieValue, "utf-8");
-            }
-            Cookie cookie = new Cookie(cookieName, cookieValue);
-            if (cookieMaxage > 0)
-                cookie.setMaxAge(cookieMaxage);
-            if (null != request) {// 设置域名的cookie
-                String domainName = getDomainName(request);
-                System.out.println(domainName);
-                if (!DO_MIAN_NAME.equals(domainName)) {
-                    cookie.setDomain(domainName);
-                }
-            }
-            cookie.setPath("/");
-            response.addCookie(cookie);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 设置Cookie的值，并使其在指定时间内生效
-     *
-     * @param cookieMaxage cookie生效的最大秒数
-     */
-    private static final void doSetCookie(HttpServletRequest request, HttpServletResponse response,
-                                          String cookieName, String cookieValue, int cookieMaxage, String encodeString) {
-        try {
-            if (cookieValue == null) {
-                cookieValue = "";
-            } else {
-                cookieValue = URLEncoder.encode(cookieValue, encodeString);
-            }
-            Cookie cookie = new Cookie(cookieName, cookieValue);
-            if (cookieMaxage > 0)
-                cookie.setMaxAge(cookieMaxage);
-            if (null != request) {// 设置域名的cookie
-                String domainName = getDomainName(request);
-                System.out.println(domainName);
-                if (!"localhost".equals(domainName)) {
-                    cookie.setDomain(domainName);
-                }
-            }
-            cookie.setPath("/");
-            response.addCookie(cookie);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 得到cookie的域名
-     */
-    private static final String getDomainName(HttpServletRequest request) {
-        String domainName = null;
-
-        String serverName = request.getRequestURL().toString();
-        if (serverName == null || serverName.equals("")) {
-            domainName = "";
-        } else {
-            serverName = serverName.toLowerCase();
-            serverName = serverName.substring(7);
-            final int end = serverName.indexOf("/");
-            serverName = serverName.substring(0, end);
-            final String[] domains = serverName.split("\\.");
-            int len = domains.length;
-            if (len > 3) {
-                // www.xxx.com.cn
-                domainName = "." + domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
-            } else if (len <= 3 && len > 1) {
-                // xxx.com or xxx.cn
-                domainName = "." + domains[len - 2] + "." + domains[len - 1];
-            } else {
-                domainName = serverName;
+    public static void remove(String cookieName, HttpServletResponse response,boolean IsEncrypt) {
+        if(IsEncrypt){
+            try{
+                //对cookie解密
+                cookieName = EncryptionUtil.encrypt(cookieName, COOKIE_KEY, EncryptionUtil.TYPE_DES).replaceAll("=", "");
+            }catch(Exception e){
+                e.printStackTrace();
             }
         }
-
-        if (domainName != null && domainName.indexOf(":") > 0) {
-            String[] ary = domainName.split("\\:");
-            domainName = ary[0];
-        }
-        return domainName;
+        Cookie cookie = new Cookie(cookieName, null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        cookie.setDomain(DOMAIN_NAME);
+        response.addCookie(cookie);
     }
 
 

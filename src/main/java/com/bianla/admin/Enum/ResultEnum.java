@@ -5,7 +5,10 @@ package com.bianla.admin.Enum;
  */
 public enum ResultEnum {
     SUCCESS(1, "成功"), NOT_LOGIN(0, "未登录"), ERROR(-1, "服务器错误"), OTHER_ERROR(3, "其他错误"),
-    EMPTY_DATA(4, "数据为空"), NOT_MORE_DATA(5, "没有更多数据了");
+    UserInvalid(10001, "用户无效或不存在"),EMPTY_TOKEN(10002, "token为空"),
+    EMPTY_DATA(4, "数据为空"),
+    EMPTY_FILE(40001, "文件为空"),
+    NOT_MORE_DATA(5, "没有更多数据了");
     private String msg;
     private int code;
     ResultEnum(int code,String msg){
