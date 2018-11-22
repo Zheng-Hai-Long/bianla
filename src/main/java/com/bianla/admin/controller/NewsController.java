@@ -48,9 +48,9 @@ public class NewsController {
      */
     @PostMapping(value = "/add")
     public Result addNews(HttpServletRequest request, HttpServletResponse response,
-                          @Validated News param, BindingResult bindingResult,
-                          @RequestParam(value = "token", required = false) String token){
+                          @Validated News param, BindingResult bindingResult){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
@@ -69,9 +69,9 @@ public class NewsController {
      */
     @PostMapping(value = "/edit")
     public Result editNews(HttpServletRequest request, HttpServletResponse response,
-                           @Validated News param, BindingResult bindingResult,
-                           @RequestParam(value = "token", required = false) String token){
+                           @Validated News param, BindingResult bindingResult){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
@@ -94,9 +94,9 @@ public class NewsController {
      */
     @PostMapping(value = "/{id}/delete")
     public Result deleteNews(HttpServletRequest request, HttpServletResponse response,
-                             @PathVariable("id") Integer id,
-                             @RequestParam(value = "token", required = false) String token){
+                             @PathVariable("id") Integer id){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
@@ -120,9 +120,9 @@ public class NewsController {
     public Result getAdminNewsList(HttpServletRequest request, HttpServletResponse response,
                                    @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                    @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                                   @RequestParam(value = "token", required = false) String token,
                                    News param){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
@@ -161,9 +161,9 @@ public class NewsController {
      */
     @PostMapping(value = "/upload/image")
     public Result uploadImage(HttpServletRequest request, HttpServletResponse response,
-                              @RequestParam("file")MultipartFile file,
-                              @RequestParam(value = "token", required = false) String token){
+                              @RequestParam("file")MultipartFile file){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
@@ -183,9 +183,9 @@ public class NewsController {
      */
     @PostMapping("/{id}/send")
     public Result sendNews(HttpServletRequest request, HttpServletResponse response,
-                           @PathVariable("id") Integer id,
-                           @RequestParam(value = "token", required = false) String token){
+                           @PathVariable("id") Integer id){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
@@ -208,9 +208,9 @@ public class NewsController {
      */
     @PostMapping("/{id}/hide")
     public Result hideNews(HttpServletRequest request, HttpServletResponse response,
-                           @PathVariable("id") Integer id,
-                           @RequestParam(value = "token", required = false) String token){
+                           @PathVariable("id") Integer id){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }

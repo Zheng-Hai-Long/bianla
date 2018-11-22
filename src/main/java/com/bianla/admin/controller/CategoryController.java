@@ -31,9 +31,9 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/list")
-    public Result getNewsCategoryList(HttpServletRequest request, HttpServletResponse response,
-                                      @RequestParam(value = "token", required = false) String token){
+    public Result getNewsCategoryList(HttpServletRequest request, HttpServletResponse response){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
@@ -54,9 +54,9 @@ public class CategoryController {
      */
     @PostMapping(value = "/add")
     public Result addsCategory(HttpServletRequest request, HttpServletResponse response,
-                               @Validated Category param, BindingResult bindingResult,
-                               @RequestParam(value = "token", required = false) String token){
+                               @Validated Category param, BindingResult bindingResult){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
@@ -80,9 +80,9 @@ public class CategoryController {
      */
     @PostMapping(value = "/edit")
     public Result editsCategory(HttpServletRequest request, HttpServletResponse response,
-                                @Validated Category param, BindingResult bindingResult,
-                                @RequestParam(value = "token", required = false) String token){
+                                @Validated Category param, BindingResult bindingResult){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
@@ -105,9 +105,9 @@ public class CategoryController {
      */
     @PostMapping(value = "/{id}/delete")
     public Result deletesCategory(HttpServletRequest request, HttpServletResponse response,
-                                  @PathVariable("id") Integer id,
-                                  @RequestParam(value = "token", required = false) String token){
+                                  @PathVariable("id") Integer id){
         response.setHeader("Access-Control-Allow-Origin", "*");
+        String token = request.getHeader("token");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
