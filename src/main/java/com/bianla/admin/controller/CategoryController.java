@@ -4,8 +4,6 @@ import com.bianla.admin.Enum.ResultEnum;
 import com.bianla.admin.dto.Result;
 import com.bianla.admin.entity.Category;
 import com.bianla.admin.service.ICategoryService;
-import com.bianla.admin.utils.ActionUserUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -32,15 +30,14 @@ public class CategoryController {
      */
     @GetMapping("/list")
     public Result getNewsCategoryList(HttpServletRequest request, HttpServletResponse response){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token, request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         return categoryService.queryAll();
     }
 
@@ -55,15 +52,14 @@ public class CategoryController {
     @PostMapping(value = "/add")
     public Result addsCategory(HttpServletRequest request, HttpServletResponse response,
                                @Validated Category param, BindingResult bindingResult){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token, request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         if(bindingResult.hasErrors()){
             return new Result(ResultEnum.OTHER_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
@@ -81,15 +77,14 @@ public class CategoryController {
     @PostMapping(value = "/edit")
     public Result editsCategory(HttpServletRequest request, HttpServletResponse response,
                                 @Validated Category param, BindingResult bindingResult){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token, request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         if(bindingResult.hasErrors()){
             return new Result(ResultEnum.OTHER_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
@@ -106,15 +101,14 @@ public class CategoryController {
     @PostMapping(value = "/{id}/delete")
     public Result deletesCategory(HttpServletRequest request, HttpServletResponse response,
                                   @PathVariable("id") Integer id){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token, request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         return categoryService.deleteCategory(id);
     }
 }

@@ -5,8 +5,6 @@ import com.bianla.admin.dto.Result;
 import com.bianla.admin.entity.News;
 import com.bianla.admin.service.INewsService;
 import com.bianla.admin.service.IUploadService;
-import com.bianla.admin.utils.ActionUserUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,8 +31,6 @@ public class NewsController {
     @GetMapping("/{id}/detail")
     public Result getNewsDetail(HttpServletRequest request, HttpServletResponse response,
                                 @PathVariable("id") Integer id){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-
         return newsService.findNewsDetail(id);
     }
 
@@ -49,15 +45,14 @@ public class NewsController {
     @PostMapping(value = "/add")
     public Result addNews(HttpServletRequest request, HttpServletResponse response,
                           @Validated News param, BindingResult bindingResult){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token, request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         if(bindingResult.hasErrors()){
             return new Result(ResultEnum.OTHER_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
@@ -70,15 +65,14 @@ public class NewsController {
     @PostMapping(value = "/edit")
     public Result editNews(HttpServletRequest request, HttpServletResponse response,
                            @Validated News param, BindingResult bindingResult){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token, request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         if(bindingResult.hasErrors()){
             return new Result(ResultEnum.OTHER_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
@@ -95,15 +89,14 @@ public class NewsController {
     @PostMapping(value = "/{id}/delete")
     public Result deleteNews(HttpServletRequest request, HttpServletResponse response,
                              @PathVariable("id") Integer id){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token, request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         return newsService.deleteNews(id);
     }
 
@@ -121,15 +114,14 @@ public class NewsController {
                                    @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                    @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                                    News param){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token,request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         return newsService.findNewsByParam(param, pageNum, pageSize);
     }
 
@@ -147,7 +139,6 @@ public class NewsController {
                               @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                              News param){
-        response.setHeader("Access-Control-Allow-Origin", "*");
         param.setState(200);
         return newsService.findNewsByParam(param, pageNum, pageSize);
     }
@@ -162,15 +153,14 @@ public class NewsController {
     @PostMapping(value = "/upload/image")
     public Result uploadImage(HttpServletRequest request, HttpServletResponse response,
                               @RequestParam("file")MultipartFile file){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token, request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         return uploadService.uploadNewsCoverImage(file);
     }
 
@@ -184,15 +174,14 @@ public class NewsController {
     @PostMapping("/{id}/send")
     public Result sendNews(HttpServletRequest request, HttpServletResponse response,
                            @PathVariable("id") Integer id){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token, request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         News news = new News();
         news.setState(200);
         news.setId(id);
@@ -209,15 +198,14 @@ public class NewsController {
     @PostMapping("/{id}/hide")
     public Result hideNews(HttpServletRequest request, HttpServletResponse response,
                            @PathVariable("id") Integer id){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        String token = request.getHeader("token");
+        /*String token = request.getHeader("Authorization");
         if(StringUtils.isBlank(token)){
             return new Result(ResultEnum.EMPTY_TOKEN);
         }
         Result result = ActionUserUtil.getUserId(token, request, response);
         if(result.getCode() != 1){
             return result;
-        }
+        }*/
         News news = new News();
         news.setState(300);
         news.setId(id);
